@@ -1,6 +1,10 @@
 // import { useLoaderData } from "react-router-dom";
 
+import { useContext } from "react";
+import { AuthContext } from "../../Providers/AuthProvider";
+
 const CheckOut = () => {
+    const {user} = useContext(AuthContext)
 
     // const service = useLoaderData();
     return (
@@ -10,16 +14,16 @@ const CheckOut = () => {
                     <div className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="form-control w-full">
-                                <input type="text" required name="firstName" placeholder="First Name" className="input input-bordered w-full" />
+                                <input type="text" required name="name" defaultValue={user?.displayName} placeholder="Your Name" className="input input-bordered w-full" />
                             </div>
                             <div className="form-control w-full">
-                                <input type="text" required name="lastName" placeholder="Last Name" className="input input-bordered w-full" />
+                                <input type="date" required name="date" className="input input-bordered w-full" />
+                            </div>
+                            <div className="form-control w-full">
+                                <input type="email" required name="email" defaultValue={user?.email} placeholder="Your Email" className="input input-bordered w-full" />
                             </div>
                             <div className="form-control w-full">
                                 <input type="text" required name="number" placeholder="Your Phone" className="input input-bordered w-full" />
-                            </div>
-                            <div className="form-control w-full">
-                                <input type="email" required name="email" placeholder="Your Email" className="input input-bordered w-full" />
                             </div>
                         </div>
                         <div>
