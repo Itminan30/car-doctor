@@ -1,7 +1,8 @@
 import { BsArrowRight } from 'react-icons/bs';
 import PropTypes from "prop-types";
+import { Link } from 'react-router-dom';
 const ServiceCard = ({ service = {} }) => {
-    const {img, title, price} = service;
+    const { _id, img, title, price } = service;
     return (
         <div className="border py-4 rounded-lg space-y-3">
             <div className="w-11/12 mx-auto">
@@ -14,9 +15,11 @@ const ServiceCard = ({ service = {} }) => {
                 <h4 className="">
                     Price: ${price}
                 </h4>
-                <button>
-                    <BsArrowRight></BsArrowRight>
-                </button>
+                <Link to={`/checkout/${_id}`}>
+                    <button>
+                        <BsArrowRight></BsArrowRight>
+                    </button>
+                </Link>
             </div>
         </div>
     );
