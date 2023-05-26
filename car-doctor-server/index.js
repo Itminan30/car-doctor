@@ -40,7 +40,7 @@ async function run() {
         // get a specific service
         app.get("/service/:id", async (req, res) => {
             const id = req.params.id;
-            const query = {_id: new ObjectId(id)};
+            const query = { _id: new ObjectId(id) };
             const result = await serviceCollection.findOne(query);
             res.send(result);
         })
@@ -48,24 +48,38 @@ async function run() {
         // get booking with query
         app.get("/bookings", async (req, res) => {
             let query = {};
-            if(req.query?.email){
-                query = {email: req.query.email};
+            if (req.query?.email) {
+                query = { email: req.query.email };
             }
             const result = await bookingCollection.find(query).toArray();
             res.send(result);
         })
 
         // post for booking
-        app.post("/bookings", async(req, res) => {
+        app.post("/bookings", async (req, res) => {
             const booking = req.body;
             const result = await bookingCollection.insertOne(booking);
+            res.send(result);
+        })
+
+        // patch method for update booking 
+        app.patch("/bookings/:id", async (req, res) => {
+            const id = req.params.id;
+            const updatedBooking = req.body;
+            const filter = { _id: new ObjectId(id) };
+            const updateDoc = {
+                $set: {
+                    status: updatedBooking.status
+                },
+            };
+            const result = await bookingCollection.updateOne(filter, updateDoc);
             res.send(result);
         })
 
         // delete for delete a specific booking
         app.delete("/bookings/:id", async (req, res) => {
             const id = req.params.id;
-            const query = {_id: new ObjectId(id)};
+            const query = { _id: new ObjectId(id) };
             const result = await bookingCollection.deleteOne(query);
             res.send(result);
         })

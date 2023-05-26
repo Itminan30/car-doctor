@@ -26,15 +26,53 @@ const Bookings = () => {
                 fetch(`http://localhost:5000/bookings/${_id}`, {
                     method: "DELETE"
                 })
-                .then(res => res.json())
-                .then(data => {
-                    console.log(data);
-                    const remainingBooking = booking.filter(book => book._id !== _id);
-                    setBooking(remainingBooking);
-                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                        const remainingBooking = booking.filter(book => book._id !== _id);
+                        setBooking(remainingBooking);
+                    })
                 Swal.fire(
                     'Deleted!',
                     'Your file has been deleted.',
+                    'success'
+                )
+            }
+        })
+    }
+
+    const handleBookingConfirm = _id => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Confirm it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`http://localhost:5000/bookings/${_id}`, {
+                    method: "PATCH",
+                    headers: {
+                        "content-type": "application/json"
+                    },
+                    body: JSON.stringify({ status: "confirmed" })
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                        if (data.modifiedCount > 0) {
+                            const updatedBooking = booking.find(book => book._id === _id);
+                            const remainingBooking = booking.filter(book => book._id !== _id);
+                            updatedBooking.status = "confirmed";
+                            const newBooking = [updatedBooking, ...remainingBooking];
+                            setBooking(newBooking);
+                        }
+                    })
+                Swal.fire(
+                    'Confirmed!',
+                    'Your Service has been Confirmed.',
                     'success'
                 )
             }
@@ -90,7 +128,13 @@ const Bookings = () => {
                                 </td>
                                 <td>{book.date}</td>
                                 <th>
-                                    <button className="btn btn-error btn-sm">details</button>
+                                    {
+                                        book.status === "confirmed" ?
+                                            <div>
+                                                Service Confirmed
+                                            </div> :
+                                            <button onClick={() => handleBookingConfirm(book._id)} className="btn btn-success btn-sm">Confirm</button>
+                                    }
                                 </th>
                             </tr>)
                         }
