@@ -1,7 +1,18 @@
 import { Link } from "react-router-dom";
 import logo from "../../../assets/logo.svg"
+import { useContext } from "react";
+import { AuthContext } from "../../../Providers/AuthProvider";
 
 const NavBar = () => {
+    const { user, logOut } = useContext(AuthContext);
+
+    const handleLogout = () => {
+        logOut()
+            .then(() => console.log("user successfully logged out"))
+            .catch(error => {
+                console.log(error);
+            })
+    }
     const navItems = <>
         <li>
             <Link className="font-semibold md:font-bold md:text-lg text-[#444444]" to="/">Home</Link>
@@ -9,9 +20,13 @@ const NavBar = () => {
         <li>
             <Link className="font-semibold md:font-bold md:text-lg text-[#444444]" to="/">About</Link>
         </li>
-        <li>
-            <Link className="font-semibold md:font-bold md:text-lg text-[#444444]" to="/">Service</Link>
-        </li>
+        {
+            user ?
+                <li>
+                    <Link className="font-semibold md:font-bold md:text-lg text-[#444444]" to="/bookings">Service</Link>
+                </li> :
+                <></>
+        }
         <li>
             <Link className="font-semibold md:font-bold md:text-lg text-[#444444]" to="/">Blog</Link>
         </li>
@@ -40,9 +55,21 @@ const NavBar = () => {
                 </ul>
             </div>
             <div className="navbar-end">
-                <Link to="/login" className="btn btn-outline btn-error text-xs font-semibold md:text-base rounded">
-                    Appointment
-                </Link>
+                <div className="flex gap-3">
+                    {user?.displayName ?
+                        <div className="text-error font-bold text-xl border border-error px-3 py-2 rounded">{user.displayName}</div> :
+                        <></>
+                    }
+                    {user ?
+                        <button onClick={handleLogout} className="btn btn-outline btn-error text-xs font-semibold md:text-base rounded">
+                            Logout
+                        </button> :
+                        <Link to="/login" className="btn btn-outline btn-error text-xs font-semibold md:text-base rounded">
+                            Login
+                        </Link>
+
+                    }
+                </div>
             </div>
         </div>
     );
