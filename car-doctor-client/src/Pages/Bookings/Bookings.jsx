@@ -1,17 +1,45 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Providers/AuthProvider";
+import Swal from "sweetalert2";
 
 const Bookings = () => {
     const { user } = useContext(AuthContext);
     const [booking, setBooking] = useState([]);
-    console.log(user?.email);
+
     useEffect(() => {
         fetch(`http://localhost:5000/bookings?email=${user?.email}`)
             .then(res => res.json())
             .then(data => setBooking(data))
     }, [user?.email])
 
-    console.log(booking);
+    const handleDelete = _id => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`http://localhost:5000/bookings/${_id}`, {
+                    method: "DELETE"
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    const remainingBooking = booking.filter(book => book._id !== _id);
+                    setBooking(remainingBooking);
+                })
+                Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                )
+            }
+        })
+    }
 
     return (
         <div>
@@ -24,9 +52,7 @@ const Bookings = () => {
                     <thead>
                         <tr>
                             <th>
-                                <label>
-                                    <input type="checkbox" className="checkbox" />
-                                </label>
+
                             </th>
                             <th>Service Name</th>
                             <th>Service Id</th>
@@ -40,9 +66,9 @@ const Bookings = () => {
                         {
                             booking.map((book, id) => <tr key={id}>
                                 <th>
-                                    <label>
-                                        <input type="checkbox" className="checkbox" />
-                                    </label>
+                                    <button onClick={() => handleDelete(book._id)} className="btn btn-circle btn-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                    </button>
                                 </th>
                                 <td>
                                     <div className="flex items-center space-x-3">
