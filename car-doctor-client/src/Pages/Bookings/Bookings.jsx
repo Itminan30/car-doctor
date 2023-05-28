@@ -1,16 +1,30 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Providers/AuthProvider";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const Bookings = () => {
     const { user } = useContext(AuthContext);
     const [booking, setBooking] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`http://localhost:5000/bookings?email=${user?.email}`)
+        fetch(`http://localhost:5000/bookings?email=${user?.email}`, {
+            method: "GET",
+            headers: {
+                authorization: `Bearer ${localStorage.getItem("car-access-token")}`
+            }
+        })
             .then(res => res.json())
-            .then(data => setBooking(data))
-    }, [user?.email])
+            .then(data => {
+                if(!data.error){
+                    setBooking(data)
+                }
+                else{
+                    navigate("/login");
+                }
+            })
+    }, [user?.email, navigate])
 
     const handleDelete = _id => {
         Swal.fire({

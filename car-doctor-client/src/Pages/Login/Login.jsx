@@ -1,10 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logimg from "../../assets/images/login/login.svg"
 import { useContext } from "react";
 import { AuthContext } from "../../Providers/AuthProvider";
+import SocialLogin from "../Shared/SocialLogin/SocialLogin";
 const Login = () => {
 
-    const {signIn } = useContext(AuthContext);
+    const { signIn } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/";
 
     const handleLogin = event => {
         event.preventDefault();
@@ -12,15 +16,17 @@ const Login = () => {
         const email = form.email.value;
         const password = form.password.value;
 
-        signIn(email, password) 
-        .then(result => {
-            const currentUser = result.user;
-            console.log(currentUser);
-        })
-        .catch(error => {
-            console.log(error);
-        })
-        
+        signIn(email, password)
+            .then(result => {
+                const currentUser = result.user;
+                console.log(currentUser);
+                navigate(from, { replace: true });
+                
+            })
+            .catch(error => {
+                console.log(error);
+            })
+
     }
 
     return (
@@ -52,9 +58,10 @@ const Login = () => {
                                 <small>New to Car Doctor!? <Link className="text-error font-bold" to="/signup">Sign Up</Link></small>
                             </div>
                             <div className="form-control mt-5">
-                                <input className="btn btn-error"  value="Login" type="submit" />
+                                <input className="btn btn-error" value="Login" type="submit" />
                             </div>
                         </form>
+                        <SocialLogin></SocialLogin>
                     </div>
                 </div>
             </div>

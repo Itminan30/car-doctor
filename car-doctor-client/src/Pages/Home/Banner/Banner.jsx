@@ -24,7 +24,7 @@ const Banner = () => {
     return (
         <div className="carousel md:w-4/5 h-[450px] md:h-[600px] mx-auto rounded-lg my-5 md:my-10">
             <div id="slide1" className="carousel-item relative w-full  ">
-                <img src={img1} className="w-full object-cover" />
+                <img src={img4} className="w-full object-cover" />
                 {textWithGradient}
                 <div className="absolute flex justify-end transform -translate-y-1/2 left-5 right-5 bottom-0 gap-5">
                     <a href="#slide6" className="btn btn-circle">❮</a>
@@ -48,7 +48,7 @@ const Banner = () => {
                 </div>
             </div>
             <div id="slide4" className="carousel-item relative w-full">
-                <img src={img4} className="w-full object-cover" />
+                <img src={img1} className="w-full object-cover" />
                 {textWithGradient}
                 <div className="absolute flex justify-end transform -translate-y-1/2 left-5 right-5 bottom-0 gap-5">
                     <a href="#slide3" className="btn btn-circle">❮</a>

@@ -2,9 +2,10 @@ import { Link } from "react-router-dom";
 import logimg from "../../assets/images/login/login.svg"
 import { useContext } from "react";
 import { AuthContext } from "../../Providers/AuthProvider";
+import SocialLogin from "../Shared/SocialLogin/SocialLogin";
 const SignUp = () => {
 
-    const {createUser, updateUser} = useContext(AuthContext);
+    const { createUser, updateUser } = useContext(AuthContext);
 
     const handleSignUp = event => {
         event.preventDefault();
@@ -12,22 +13,22 @@ const SignUp = () => {
         const name = form.name.value;
         const email = form.email.value;
         const password = form.password.value;
-        
+
         createUser(email, password)
-        .then(result => {
-            const user = result.user;
-            console.log(user);
-            updateUser(name)
-            .then(() => {
-                console.log("Username Updated");
+            .then(result => {
+                const user = result.user;
+                console.log(user);
+                updateUser(name)
+                    .then(() => {
+                        console.log("Username Updated");
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
             })
-            .catch(error => {
+            .then(error => {
                 console.log(error);
             })
-        })
-        .then(error => {
-            console.log(error);
-        })
     }
 
     return (
@@ -65,6 +66,7 @@ const SignUp = () => {
                                 <input className="btn btn-error" value="Sign Up" type="submit" />
                             </div>
                         </form>
+                        <SocialLogin></SocialLogin>
                     </div>
                 </div>
             </div>
