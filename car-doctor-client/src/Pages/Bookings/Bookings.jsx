@@ -9,7 +9,7 @@ const Bookings = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`http://localhost:5000/bookings?email=${user?.email}`, {
+        fetch(`https://car-doctor-server-sable-seven.vercel.app/bookings?email=${user?.email}`, {
             method: "GET",
             headers: {
                 authorization: `Bearer ${localStorage.getItem("car-access-token")}`
@@ -37,7 +37,7 @@ const Bookings = () => {
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:5000/bookings/${_id}`, {
+                fetch(`https://car-doctor-server-sable-seven.vercel.app/bookings/${_id}`, {
                     method: "DELETE"
                 })
                     .then(res => res.json())
@@ -66,7 +66,7 @@ const Bookings = () => {
             confirmButtonText: 'Yes, Confirm it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:5000/bookings/${_id}`, {
+                fetch(`https://car-doctor-server-sable-seven.vercel.app/bookings/${_id}`, {
                     method: "PATCH",
                     headers: {
                         "content-type": "application/json"
