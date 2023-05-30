@@ -21,7 +21,6 @@ const Login = () => {
                 const currentUser = result.user;
                 console.log(currentUser);
                 navigate(from, { replace: true });
-                
             })
             .catch(error => {
                 console.log(error);
